@@ -2,6 +2,8 @@ from unittest import TestCase
 from src.leilao.dominio import Usuario, Lance, Leilao
 import pytest
 
+from src.leilao.excecoes import LanceInvalido
+
 
 class TestLeilao(TestCase):
 
@@ -19,22 +21,22 @@ class TestLeilao(TestCase):
         # self.lance_do_mah = Lance(self. marina, 2000.00)
 
     def test_deve_retornar_o_maior_e_o_menor_lance_quando_adicionados_em_ordem_crescente(self):
-        self.leilao.propoe(self.lance_do_levy)
-
         marina = Usuario("Marina", 500.00)
-        lance_do_mah = Lance(marina, 2000.00)
+        lance_do_mah = Lance(marina, 200.00)
+
+        self.leilao.propoe(self.lance_do_levy)
         self.leilao.propoe(lance_do_mah)
 
         menor_valor_esperado = 100.00
-        maior_valor_esperado = 2000.00
+        maior_valor_esperado = 200.00
 
         self.assertEqual(menor_valor_esperado, self.leilao.menor_lance)
         self.assertEqual(maior_valor_esperado, self.leilao.maior_lance)
 
     def test_deve_permitir_propor_um_lance_em_ordem_decrescente(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LanceInvalido):
             marina = Usuario("Marina", 500.00)
-            lance_do_mah = Lance(marina, 2000.00)
+            lance_do_mah = Lance(marina, 200.00)
 
             self.leilao.propoe(lance_do_mah)
             self.leilao.propoe(self.lance_do_levy)
@@ -47,17 +49,17 @@ class TestLeilao(TestCase):
 
     def test_deve_retornar_o_valor_de_maior_e_menor_lance_quando_leilao_tem_tres_lances(self):
         marina = Usuario("Marina", 500.00)
-        lance_do_mah = Lance(marina, 2000.00)
+        lance_do_mah = Lance(marina, 200.00)
 
         cleovaldo = Usuario("Cleovaldo", 500.00)
-        lance_do_cleo = Lance(cleovaldo, 999.99)
+        lance_do_cleo = Lance(cleovaldo, 199.99)
 
         self.leilao.propoe(self.lance_do_levy)
         self.leilao.propoe(lance_do_cleo)
         self.leilao.propoe(lance_do_mah)
 
         menor_valor_esperado = 100.00
-        maior_valor_esperado = 2000.00
+        maior_valor_esperado = 200.00
 
         self.assertEqual(menor_valor_esperado, self.leilao.menor_lance)
         self.assertEqual(maior_valor_esperado, self.leilao.maior_lance)
@@ -67,10 +69,9 @@ class TestLeilao(TestCase):
         qtd_lances_recebido = len(self.leilao.lances)
         self.assertEqual(1, qtd_lances_recebido)
 
-    # se o ultimo usuário for diferente, deve permitir propor um lance.
     def test_deve_permitir_propor_um_lance_caso_o_ultimo_usuario_seja_diferente(self):
         marina = Usuario("Marina", 500.00)
-        lance_da_mah = Lance(marina, 2000.00)
+        lance_da_mah = Lance(marina, 200.00)
         self.leilao.propoe(self.lance_do_levy)
         self.leilao.propoe(lance_da_mah)
 
@@ -78,10 +79,9 @@ class TestLeilao(TestCase):
 
         self.assertEqual(2, qtd_lances_recebido)
 
-    # se o ultimo usuário for o mesmo, NÃO deve permitir propor um lance.
     def test_nao_deve_permitir_propor_um_lance_caso_o_usuario_seja_o_mesmo(self):
         lance_do_levy200 = Lance(self.levy, 200.00)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(LanceInvalido):
             self.leilao.propoe(self.lance_do_levy)
             self.leilao.propoe(lance_do_levy200)
