@@ -7,7 +7,7 @@ class TestLeilao(TestCase):
 
 #Método "setUp" da classe TestCase é utilizado para recriar os objetos(cenário de teste) em cada um dos métodos de "test_"
     def setUp(self):
-        self.levy = Usuario("Levy")
+        self.levy = Usuario("Levy", 500.00)
         self.lance_do_levy = Lance(self.levy, 100.00)
         self.leilao = Leilao("Celular")
 
@@ -21,7 +21,7 @@ class TestLeilao(TestCase):
     def test_deve_retornar_o_maior_e_o_menor_lance_quando_adicionados_em_ordem_crescente(self):
         self.leilao.propoe(self.lance_do_levy)
 
-        marina = Usuario("Marina")
+        marina = Usuario("Marina", 500.00)
         lance_do_mah = Lance(marina, 2000.00)
         self.leilao.propoe(lance_do_mah)
 
@@ -33,7 +33,7 @@ class TestLeilao(TestCase):
 
     def test_deve_permitir_propor_um_lance_em_ordem_decrescente(self):
         with self.assertRaises(ValueError):
-            marina = Usuario("Marina")
+            marina = Usuario("Marina", 500.00)
             lance_do_mah = Lance(marina, 2000.00)
 
             self.leilao.propoe(lance_do_mah)
@@ -46,10 +46,10 @@ class TestLeilao(TestCase):
         self.assertEqual(100.00, self.leilao.maior_lance)
 
     def test_deve_retornar_o_valor_de_maior_e_menor_lance_quando_leilao_tem_tres_lances(self):
-        marina = Usuario("Marina")
+        marina = Usuario("Marina", 500.00)
         lance_do_mah = Lance(marina, 2000.00)
 
-        cleovaldo = Usuario("Cleovaldo")
+        cleovaldo = Usuario("Cleovaldo", 500.00)
         lance_do_cleo = Lance(cleovaldo, 999.99)
 
         self.leilao.propoe(self.lance_do_levy)
@@ -69,7 +69,7 @@ class TestLeilao(TestCase):
 
     # se o ultimo usuário for diferente, deve permitir propor um lance.
     def test_deve_permitir_propor_um_lance_caso_o_ultimo_usuario_seja_diferente(self):
-        marina = Usuario("Marina")
+        marina = Usuario("Marina", 500.00)
         lance_da_mah = Lance(marina, 2000.00)
         self.leilao.propoe(self.lance_do_levy)
         self.leilao.propoe(lance_da_mah)
