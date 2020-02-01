@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 from Jogo import Jogo
 
+# __name__= Indica que a aplicacao ira executar neste mesmo codigo
 app = Flask(__name__)
+# 'secret_key'= necessario para utilizar os cookies (session) o que indica uma "assinatura" de criptografia
+app.secret_key = "alura"
 
 jogo1 = Jogo('Super Mario', 'Ação', 'SNES')
 jogo2 = Jogo('Pokemon Gold', 'RPG', 'GBA')
@@ -35,8 +38,12 @@ def login():
 @app.route("/autenticar", methods=['POST', ])
 def autenticar():
     if 'mestra' == request.form['senha']:
+# 'sesion'= armazena informacoes por mais de 1 ciclo de request (cria coockie no client)
+        session['usuario_logado'] = request.form['usuario']
+        flash(f'Usuário \"{session["usuario_logado"]}\" está logado!!!')
         return redirect('/')
     else:
+        flash(f'Usuário \"{session["usuario_logado"]}\" NÃO está logado!!!')
         return redirect('/login')
-    
+
 app.run(debug=True)
