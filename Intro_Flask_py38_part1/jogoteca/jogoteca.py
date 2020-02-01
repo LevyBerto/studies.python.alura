@@ -18,12 +18,25 @@ def novo():
 
 @app.route("/criar", methods=['POST',])
 def criar():
-# request = Helper do Flask para obter o valor do campo dentro do form (HTML), de acordo com o "id" da tag
+# request = Helper do Flask para obter o valor do campo dentro do form (HTML), de acordo com o "name" da tag
     nome = request.form['nome']
+    # O 'form'= retorna um dicionario e o acesso eh feito pela key
+    # ['categoria'] refere-se pelo campo ('name="categoria"') do HTML
     categoria = request.form['categoria']
     console = request.form['console']
     jogo_novo = Jogo(nome, categoria, console)
     lista.append(jogo_novo)
     return redirect('/')
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/autenticar", methods=['POST', ])
+def autenticar():
+    if 'mestra' == request.form['senha']:
+        return redirect('/')
+    else:
+        return redirect('/login')
+    
 app.run(debug=True)
