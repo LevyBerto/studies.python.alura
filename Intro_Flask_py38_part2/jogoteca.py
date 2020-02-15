@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
+
 from Jogo import Jogo
 from Usuario import Usuario
 
